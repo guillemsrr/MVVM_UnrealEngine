@@ -1,11 +1,11 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "MVVM_PuzzlePawn.h"
-#include "MVVM_PuzzleBlock.h"
-#include "Camera/CameraComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
+
+#include "MVVM_Puzzle/PuzzleGame/MVVM_PuzzleBlock.h"
 
 AMVVM_PuzzlePawn::AMVVM_PuzzlePawn(const FObjectInitializer& ObjectInitializer) 
 	: Super(ObjectInitializer)

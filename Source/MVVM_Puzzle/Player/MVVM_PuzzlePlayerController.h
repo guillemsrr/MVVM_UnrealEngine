@@ -6,7 +6,6 @@
 #include "GameFramework/PlayerController.h"
 #include "MVVM_PuzzlePlayerController.generated.h"
 
-/** PlayerController class used to enable cursor */
 UCLASS()
 class AMVVM_PuzzlePlayerController : public APlayerController
 {

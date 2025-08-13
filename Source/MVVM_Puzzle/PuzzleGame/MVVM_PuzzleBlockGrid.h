@@ -44,15 +44,18 @@ protected:
 	TSubclassOf<AMVVM_PuzzleBlock> PuzzleBlockClass;
 
 public:
-
 	/** Handle the block being clicked */
 	void AddScore();
 
 	/** Returns DummyRoot subobject **/
-	FORCEINLINE class USceneComponent* GetDummyRoot() const { return DummyRoot; }
+	FORCEINLINE class USceneComponent* GetDummyRoot() const
+	{
+		return DummyRoot;
+	}
+
 	/** Returns ScoreText subobject **/
-	FORCEINLINE class UTextRenderComponent* GetScoreText() const { return ScoreText; }
+	FORCEINLINE class UTextRenderComponent* GetScoreText() const
+	{
+		return ScoreText;
+	}
 };
-
-
-

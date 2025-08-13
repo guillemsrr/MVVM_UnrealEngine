@@ -13,8 +13,8 @@ AMVVM_PuzzleBlock::AMVVM_PuzzleBlock()
 	RootComponent = DummyRoot;
 
 	BlockMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BlockMesh0"));
-	BlockMesh->SetRelativeScale3D(FVector(1.f,1.f,0.25f));
-	BlockMesh->SetRelativeLocation(FVector(0.f,0.f,25.f));
+	BlockMesh->SetRelativeScale3D(FVector(1.f, 1.f, 0.25f));
+	BlockMesh->SetRelativeLocation(FVector(0.f, 0.f, 25.f));
 	BlockMesh->SetupAttachment(DummyRoot);
 	BlockMesh->OnClicked.AddDynamic(this, &AMVVM_PuzzleBlock::BlockClicked);
 	BlockMesh->OnInputTouchBegin.AddDynamic(this, &AMVVM_PuzzleBlock::OnFingerPressedBlock);
@@ -24,7 +24,6 @@ void AMVVM_PuzzleBlock::BlockClicked(UPrimitiveComponent* ClickedComp, FKey Butt
 {
 	HandleClicked();
 }
-
 
 void AMVVM_PuzzleBlock::OnFingerPressedBlock(ETouchIndex::Type FingerIndex, UPrimitiveComponent* TouchedComponent)
 {

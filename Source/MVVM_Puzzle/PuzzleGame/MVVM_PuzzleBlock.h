@@ -56,10 +56,14 @@ public:
 
 public:
 	/** Returns DummyRoot subobject **/
-	FORCEINLINE class USceneComponent* GetDummyRoot() const { return DummyRoot; }
+	FORCEINLINE class USceneComponent* GetDummyRoot() const
+	{
+		return DummyRoot;
+	}
+
 	/** Returns BlockMesh subobject **/
-	FORCEINLINE class UStaticMeshComponent* GetBlockMesh() const { return BlockMesh; }
+	FORCEINLINE class UStaticMeshComponent* GetBlockMesh() const
+	{
+		return BlockMesh;
+	}
 };
-
-
-
