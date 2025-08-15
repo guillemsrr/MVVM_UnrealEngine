@@ -4,6 +4,11 @@
 
 void UMVVMPuzzleScore::SetScore(int32 InScore)
 {
+	if (InScore < 0)
+	{
+		return;
+	}
+
 	if (UE_MVVM_SET_PROPERTY_VALUE(Score, InScore))
 	{
 		UE_MVVM_BROADCAST_FIELD_VALUE_CHANGED(GetScore);
@@ -12,5 +17,16 @@ void UMVVMPuzzleScore::SetScore(int32 InScore)
 
 void UMVVMPuzzleScore::ResetScore()
 {
-	UE_MVVM_SET_PROPERTY_VALUE(Score, 0);
+	SetScore(0);
+	OnResetRequested.Broadcast();
+}
+
+void UMVVMPuzzleScore::IncreaseScore()
+{
+	SetScore(Score + 1);
+}
+
+void UMVVMPuzzleScore::DecreaseScore()
+{
+	SetScore(Score - 1);
 }

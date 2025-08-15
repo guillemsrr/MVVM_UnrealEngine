@@ -7,24 +7,29 @@
 
 #include "MVVMPuzzleScore.generated.h"
 
-
 UCLASS()
 class MVVM_PUZZLE_API UMVVMPuzzleScore : public UMVVMViewModelBase
 {
 	GENERATED_BODY()
 
 public:
+	DECLARE_MULTICAST_DELEGATE(FOnResetRequested)
+
+	FOnResetRequested OnResetRequested;
+
 	UFUNCTION(BlueprintPure, FieldNotify)
 	int32 GetScore() const
 	{
 		return Score;
 	}
 
-	UFUNCTION(BlueprintCallable)
 	void SetScore(int32 InScore);
 
 	UFUNCTION(BlueprintCallable)
 	void ResetScore();
+
+	void IncreaseScore();
+	void DecreaseScore();
 
 private:
 	UPROPERTY(FieldNotify, Getter, Setter)

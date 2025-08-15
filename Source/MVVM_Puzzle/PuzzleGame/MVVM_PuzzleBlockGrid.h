@@ -13,16 +13,20 @@ class AMVVM_PuzzleBlockGrid : public AActor
 {
 	GENERATED_BODY()
 
-	UPROPERTY(Category = Grid, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+protected:
+	AMVVM_PuzzleBlockGrid();
+	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
+protected:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AMVVM_PuzzleBlock> PuzzleBlockClass;
+
+	UPROPERTY(Category = Grid, VisibleDefaultsOnly, BlueprintReadOnly)
 	class USceneComponent* DummyRoot;
 
-	UPROPERTY(Category = Grid, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Category = Grid, VisibleDefaultsOnly, BlueprintReadOnly)
 	class UTextRenderComponent* ScoreText;
-
-public:
-	AMVVM_PuzzleBlockGrid();
-
-	int32 Score;
 
 	UPROPERTY(Category=Grid, EditAnywhere, BlueprintReadOnly)
 	int32 Size;
@@ -30,16 +34,11 @@ public:
 	UPROPERTY(Category=Grid, EditAnywhere, BlueprintReadOnly)
 	float BlockSpacing;
 
-protected:
-	// Begin AActor interface
-	virtual void BeginPlay() override;
-	// End AActor interface
-
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<AMVVM_PuzzleBlock> PuzzleBlockClass;
-
 public:
-	void AddScore();
+	void TemplateIncreaseScore();
+	void TemplateDecreaseScore();
+	UFUNCTION()
+	void ResetBlocks();
 
 	FORCEINLINE class USceneComponent* GetDummyRoot() const
 	{
@@ -50,4 +49,13 @@ public:
 	{
 		return ScoreText;
 	}
+
+private:
+	int32 Score;
+
+	UPROPERTY()
+	TArray<AMVVM_PuzzleBlock*> Blocks;
+
+	void CreateBlocks();
+	void UpdateScore() const;
 };

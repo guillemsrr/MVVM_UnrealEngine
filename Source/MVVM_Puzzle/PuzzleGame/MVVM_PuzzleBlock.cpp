@@ -7,6 +7,9 @@
 #include "Engine/StaticMesh.h"
 #include "Materials/MaterialInstance.h"
 
+#include "MVVM_Puzzle/ModelViews/MVVMPuzzleScore.h"
+#include "MVVM_Puzzle/UI/PuzzleHUD.h"
+
 AMVVM_PuzzleBlock::AMVVM_PuzzleBlock()
 {
 	DummyRoot = CreateDefaultSubobject<USceneComponent>(TEXT("Dummy0"));
@@ -32,16 +35,19 @@ void AMVVM_PuzzleBlock::OnFingerPressedBlock(ETouchIndex::Type FingerIndex, UPri
 
 void AMVVM_PuzzleBlock::HandleClicked()
 {
-	if (!bIsActive)
+	APuzzleHUD* HUD = APuzzleHUD::GetHUD(this);
+	bIsActive = !bIsActive;
+	if (bIsActive)
 	{
-		bIsActive = true;
-
-		BlockMesh->SetMaterial(0, OrangeMaterial);
-
-		if (OwningGrid != nullptr)
-		{
-			OwningGrid->AddScore();
-		}
+		BlockMesh->SetMaterial(0, SelectedMaterial);
+		OwningGrid->TemplateIncreaseScore();
+		HUD->GetScoreViewModel()->IncreaseScore();
+	}
+	else
+	{
+		Highlight(true);
+		OwningGrid->TemplateDecreaseScore();
+		HUD->GetScoreViewModel()->DecreaseScore();
 	}
 }
 
@@ -54,10 +60,16 @@ void AMVVM_PuzzleBlock::Highlight(bool bOn)
 
 	if (bOn)
 	{
-		BlockMesh->SetMaterial(0, BaseMaterial);
+		BlockMesh->SetMaterial(0, HighlightMaterial);
 	}
 	else
 	{
-		BlockMesh->SetMaterial(0, BlueMaterial);
+		BlockMesh->SetMaterial(0, BaseMaterial);
 	}
+}
+
+void AMVVM_PuzzleBlock::ResetBlock()
+{
+	bIsActive = false;
+	Highlight(false);
 }

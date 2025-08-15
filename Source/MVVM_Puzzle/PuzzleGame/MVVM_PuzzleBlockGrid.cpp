@@ -6,7 +6,6 @@
 #include "Engine/World.h"
 #include "MVVM_Puzzle/UI/PuzzleHUD.h"
 #include "MVVM_Puzzle/ModelViews/MVVMPuzzleScore.h"
-#include "GameFramework/PlayerController.h"
 
 #define LOCTEXT_NAMESPACE "PuzzleBlockGrid"
 
@@ -29,6 +28,37 @@ void AMVVM_PuzzleBlockGrid::BeginPlay()
 {
 	Super::BeginPlay();
 
+	CreateBlocks();
+
+	if (APuzzleHUD* HUD = APuzzleHUD::GetHUD(this))
+	{
+		HUD->GetScoreViewModel()->OnResetRequested.AddUObject(this, &AMVVM_PuzzleBlockGrid::ResetBlocks);
+	}
+}
+
+void AMVVM_PuzzleBlockGrid::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	if (APuzzleHUD* HUD = APuzzleHUD::GetHUD(this))
+	{
+		HUD->GetScoreViewModel()->OnResetRequested.RemoveAll(this);
+	}
+
+	Super::EndPlay(EndPlayReason);
+}
+
+void AMVVM_PuzzleBlockGrid::ResetBlocks()
+{
+	Score = 0;
+	UpdateScore();
+
+	for (AMVVM_PuzzleBlock* Block : Blocks)
+	{
+		Block->ResetBlock();
+	}
+}
+
+void AMVVM_PuzzleBlockGrid::CreateBlocks()
+{
 	const int32 NumBlocks = Size * Size;
 
 	for (int32 BlockIndex = 0; BlockIndex < NumBlocks; BlockIndex++)
@@ -41,24 +71,32 @@ void AMVVM_PuzzleBlockGrid::BeginPlay()
 			PuzzleBlockClass,
 			BlockLocation,
 			FRotator(0, 0, 0));
-		if (NewBlock != nullptr)
+		if (!NewBlock)
 		{
-			NewBlock->OwningGrid = this;
+			continue;
 		}
+		Blocks.Add(NewBlock);
+		NewBlock->OwningGrid = this;
 	}
 }
 
-void AMVVM_PuzzleBlockGrid::AddScore()
+void AMVVM_PuzzleBlockGrid::TemplateIncreaseScore()
 {
 	Score++;
 
-	ScoreText->SetText(FText::Format(LOCTEXT("ScoreFmt", "Score: {0}"), FText::AsNumber(Score)));
+	UpdateScore();
+}
 
-	APuzzleHUD* HUD = APuzzleHUD::GetHUD(this);
-	if (HUD)
-	{
-		HUD->GetScoreViewModel()->SetScore(Score);
-	}
+void AMVVM_PuzzleBlockGrid::TemplateDecreaseScore()
+{
+	Score--;
+
+	UpdateScore();
+}
+
+void AMVVM_PuzzleBlockGrid::UpdateScore() const
+{
+	ScoreText->SetText(FText::Format(LOCTEXT("ScoreFmt", "Score: {0}"), FText::AsNumber(Score)));
 }
 
 #undef LOCTEXT_NAMESPACE

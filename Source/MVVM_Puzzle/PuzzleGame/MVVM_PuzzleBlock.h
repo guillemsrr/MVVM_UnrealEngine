@@ -11,47 +11,39 @@ class AMVVM_PuzzleBlock : public AActor
 {
 	GENERATED_BODY()
 
-	UPROPERTY(Category = Block, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class USceneComponent* DummyRoot;
-
-	UPROPERTY(Category = Block, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class UStaticMeshComponent* BlockMesh;
-
-public:
+protected:
 	AMVVM_PuzzleBlock();
 
-	bool bIsActive;
-
-	UPROPERTY(EditDefaultsOnly)
-	class UMaterial* BaseMaterial;
-
-	UPROPERTY(EditDefaultsOnly)
-	class UMaterialInstance* BlueMaterial;
-
-	UPROPERTY(EditDefaultsOnly)
-	class UMaterialInstance* OrangeMaterial;
-
+public:
 	UPROPERTY()
 	class AMVVM_PuzzleBlockGrid* OwningGrid;
+
+	void HandleClicked();
+	void Highlight(bool bOn);
+	void ResetBlock();
+
+protected:
+	UPROPERTY(EditDefaultsOnly)
+	UMaterial* BaseMaterial;
+
+	UPROPERTY(EditDefaultsOnly)
+	UMaterialInstance* HighlightMaterial;
+
+	UPROPERTY(EditDefaultsOnly)
+	UMaterialInstance* SelectedMaterial;
+
+	UPROPERTY(Category = Block, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	USceneComponent* DummyRoot;
+
+	UPROPERTY(Category = Block, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* BlockMesh;
+
+private:
+	bool bIsActive;
 
 	UFUNCTION()
 	void BlockClicked(UPrimitiveComponent* ClickedComp, FKey ButtonClicked);
 
 	UFUNCTION()
 	void OnFingerPressedBlock(ETouchIndex::Type FingerIndex, UPrimitiveComponent* TouchedComponent);
-
-	void HandleClicked();
-
-	void Highlight(bool bOn);
-
-public:
-	FORCEINLINE class USceneComponent* GetDummyRoot() const
-	{
-		return DummyRoot;
-	}
-
-	FORCEINLINE class UStaticMeshComponent* GetBlockMesh() const
-	{
-		return BlockMesh;
-	}
 };
