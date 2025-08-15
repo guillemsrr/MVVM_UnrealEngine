@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright (c) Guillem Serra. All Rights Reserved.
 
 #include "MVVM_PuzzlePawn.h"
 #include "GameFramework/PlayerController.h"
@@ -7,7 +7,7 @@
 
 #include "MVVM_Puzzle/PuzzleGame/MVVM_PuzzleBlock.h"
 
-AMVVM_PuzzlePawn::AMVVM_PuzzlePawn(const FObjectInitializer& ObjectInitializer) 
+AMVVM_PuzzlePawn::AMVVM_PuzzlePawn(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
 	AutoPossessPlayer = EAutoReceiveInput::Player0;

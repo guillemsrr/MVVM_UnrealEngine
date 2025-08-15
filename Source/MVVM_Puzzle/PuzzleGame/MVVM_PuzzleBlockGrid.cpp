@@ -1,26 +1,26 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright (c) Guillem Serra. All Rights Reserved.
 
 #include "MVVM_PuzzleBlockGrid.h"
 #include "MVVM_PuzzleBlock.h"
 #include "Components/TextRenderComponent.h"
 #include "Engine/World.h"
+#include "MVVM_Puzzle/UI/PuzzleHUD.h"
+#include "MVVM_Puzzle/ModelViews/MVVMPuzzleScore.h"
+#include "GameFramework/PlayerController.h"
 
 #define LOCTEXT_NAMESPACE "PuzzleBlockGrid"
 
 AMVVM_PuzzleBlockGrid::AMVVM_PuzzleBlockGrid()
 {
-	// Create dummy root scene component
 	DummyRoot = CreateDefaultSubobject<USceneComponent>(TEXT("Dummy0"));
 	RootComponent = DummyRoot;
 
-	// Create static mesh component
 	ScoreText = CreateDefaultSubobject<UTextRenderComponent>(TEXT("ScoreText0"));
 	ScoreText->SetRelativeLocation(FVector(200.f, 0.f, 0.f));
 	ScoreText->SetRelativeRotation(FRotator(90.f, 0.f, 0.f));
 	ScoreText->SetText(FText::Format(LOCTEXT("ScoreFmt", "Score: {0}"), FText::AsNumber(0)));
 	ScoreText->SetupAttachment(DummyRoot);
 
-	// Set defaults
 	Size = 3;
 	BlockSpacing = 300.f;
 }
@@ -29,10 +29,8 @@ void AMVVM_PuzzleBlockGrid::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// Number of blocks
 	const int32 NumBlocks = Size * Size;
 
-	// Loop to spawn each block
 	for (int32 BlockIndex = 0; BlockIndex < NumBlocks; BlockIndex++)
 	{
 		const float XOffset = (BlockIndex / Size) * BlockSpacing; // Divide by dimension
@@ -52,11 +50,15 @@ void AMVVM_PuzzleBlockGrid::BeginPlay()
 
 void AMVVM_PuzzleBlockGrid::AddScore()
 {
-	// Increment score
 	Score++;
 
-	// Update text
 	ScoreText->SetText(FText::Format(LOCTEXT("ScoreFmt", "Score: {0}"), FText::AsNumber(Score)));
+
+	APuzzleHUD* HUD = APuzzleHUD::GetHUD(this);
+	if (HUD)
+	{
+		HUD->GetScoreViewModel()->SetScore(Score);
+	}
 }
 
 #undef LOCTEXT_NAMESPACE

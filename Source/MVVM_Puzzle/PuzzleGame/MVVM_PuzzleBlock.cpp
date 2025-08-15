@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright (c) Guillem Serra. All Rights Reserved.
 
 #include "MVVM_PuzzleBlock.h"
 #include "MVVM_PuzzleBlockGrid.h"
@@ -32,15 +32,12 @@ void AMVVM_PuzzleBlock::OnFingerPressedBlock(ETouchIndex::Type FingerIndex, UPri
 
 void AMVVM_PuzzleBlock::HandleClicked()
 {
-	// Check we are not already active
 	if (!bIsActive)
 	{
 		bIsActive = true;
 
-		// Change material
 		BlockMesh->SetMaterial(0, OrangeMaterial);
 
-		// Tell the Grid
 		if (OwningGrid != nullptr)
 		{
 			OwningGrid->AddScore();
@@ -50,7 +47,6 @@ void AMVVM_PuzzleBlock::HandleClicked()
 
 void AMVVM_PuzzleBlock::Highlight(bool bOn)
 {
-	// Do not highlight if the block has already been activated.
 	if (bIsActive)
 	{
 		return;
